@@ -150,6 +150,10 @@ def rv(symbol, cls, args):
 class ArcsinDistribution(SingleContinuousDistribution):
     _argnames = ('a', 'b')
 
+    @property
+    def set(self):
+        return Interval(self.a, self.b)
+
     def pdf(self, x):
         return 1/(pi*sqrt((x - self.a)*(self.b - x)))
 

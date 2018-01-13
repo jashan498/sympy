@@ -926,10 +926,18 @@ def solveset(f, symbol=None, domain=S.Complexes):
         f = Add(f.lhs, - f.rhs, evaluate=False)
     elif f.is_Relational:
         if not domain.is_subset(S.Reals):
-            raise NotImplementedError(filldedent('''
-                Inequalities in the complex domain are
-                not supported. Try the real domain by
-                setting domain=S.Reals'''))
+            from sympy.core import Add
+            from sympy import im,re
+            f = Add(f.lhs, - f.rhs, evaluate=False)
+            x = Symbol('x', real=True)
+            f = f.subs(symbol, x)     ##if we wont do this then im(f)=im(x),
+            symbol=x                  ## because value of x is not known to us
+            #print(im(f))
+            if im(f) != 0:
+                raise ValueError(filldedent('''
+                    you cant compare imaginary numbers'''))
+            f= (re(f)<0)
+            #print(f)
         try:
             result = solve_univariate_inequality(
             f, symbol, domain=domain, relational=False)

@@ -444,7 +444,7 @@ def _solve_trig1(f, symbol, domain):
 
 def _solve_trig2(f, symbol, domain):
     """ Helper to solve trigonometric equations """
-    from sympy import lcm, expand_trig
+    from sympy import lcm, expand_trig, degree, simplify
     f = trigsimp(f)
     f_original = f
     trig_functions = f.atoms(sin, cos, tan, sec, cot, csc)
@@ -474,12 +474,14 @@ def _solve_trig2(f, symbol, domain):
 
     if g.has(x) or h.has(x):
         return ConditionSet(symbol, Eq(f_original, 0), domain)
-
     solns = solveset(g, y, S.Reals) - solveset(h, y, S.Reals)
 
     if isinstance(solns, FiniteSet):
-        result = Union(*[invert_complex(tan(symbol/(2*lcm(denominators))), s, symbol)[1]
+        result = Union(*[invert_real(tan(symbol/(2*lcm(denominators))), s, symbol)[1]
                        for s in solns])
+        dsol = invert_real(tan(symbol/(2*lcm(denominators))), oo, symbol)[1]
+        if degree(h) > degree(g):                   # If degree(denom)>degree(num) then there
+            result = Union(result, dsol)            # would be another sol at Lim(denom-->oo)
         return Intersection(result, domain)
     elif solns is S.EmptySet:
         return S.EmptySet

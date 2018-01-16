@@ -418,7 +418,7 @@ def _solve_trig(f, symbol, domain):
 
 
 def _solve_trig1(f, symbol, domain):
-    """ Helper to solve trigonometric equations """
+    """Primary Helper to solve trigonometric equations """
     f = trigsimp(f)
     f_original = f
     f = f.rewrite(exp)
@@ -439,11 +439,12 @@ def _solve_trig1(f, symbol, domain):
     elif solns is S.EmptySet:
         return S.EmptySet
     else:
-        return ConditionSet(symbol, Eq(f_original, 0), domain)
+        return ConditionSet(symbol, Eq(f_original, 0), S.Reals)
 
 
 def _solve_trig2(f, symbol, domain):
-    """ Helper to solve trigonometric equations """
+    """Secondary helper to solve trigonometric equations,
+    called when first helper fails """
     from sympy import lcm, expand_trig, degree, simplify
     f = trigsimp(f)
     f_original = f

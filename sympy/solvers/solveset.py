@@ -413,7 +413,7 @@ def _solve_trig(f, symbol, domain):
 
     else :
         raise NotImplementedError(filldedent('''
-            Solution to this kind of triginometric equations
+            Solution to this kind of trigonometric equations
             is yet to be implemented'''))
 
 
@@ -457,14 +457,15 @@ def _solve_trig2(f, symbol, domain):
         except ValueError:
             raise ValueError("give up, we can't solve if this is not a polynomial in x")
         if poly_ar.degree() > 1:  # degree >1 still bad
-            raise ValueError("degree of variable inside polynomail should not exceed one")
+            raise ValueError("degree of variable inside polynomial should not exceed one")
         if poly_ar.degree() == 0:  # degree 0, no x, don't care
             continue
         c = poly_ar.all_coeffs(x)[0]   # got the coefficient of x
         denominators.append(Rational(c).q)
 
     x = Dummy('x')
-    f = f.subs(symbol, 2*lcm(denominators)*x)
+    d_lcm = lcm(denominators)
+    f = f.subs(symbol, 2*d_lcm*x)
     f = f.rewrite(tan)
     f = expand_trig(f)
     f = together(f)
@@ -478,9 +479,9 @@ def _solve_trig2(f, symbol, domain):
     solns = solveset(g, y, S.Reals) - solveset(h, y, S.Reals)
 
     if isinstance(solns, FiniteSet):
-        result = Union(*[invert_real(tan(symbol/(2*lcm(denominators))), s, symbol)[1]
+        result = Union(*[invert_real(tan(symbol/(2*d_lcm)), s, symbol)[1]
                        for s in solns])
-        dsol = invert_real(tan(symbol/(2*lcm(denominators))), oo, symbol)[1]
+        dsol = invert_real(tan(symbol/(2*d_lcm)), oo, symbol)[1]
         if degree(h) > degree(g):                   # If degree(denom)>degree(num) then there
             result = Union(result, dsol)            # would be another sol at Lim(denom-->oo)
         return Intersection(result, domain)

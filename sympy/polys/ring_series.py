@@ -1843,7 +1843,10 @@ _convert_func = {
         'cos': 'rs_cos',
         'exp': 'rs_exp',
         'tan': 'rs_tan',
-        'log': 'rs_log'
+        'log': 'rs_log',
+        'sinh': 'rs_sinh',
+        'cosh': 'rs_cosh',
+        'tanh': 'rs_tanh'
         }
 
 def rs_min_pow(expr, series_rs, a):

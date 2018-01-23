@@ -13,8 +13,8 @@ Fortran77" by Clive G. Page:
 http://www.star.le.ac.uk/~cgp/prof77.html
 
 Fortran is a case-insensitive language. This might cause trouble because
-SymPy is case sensitive. The implementation below does not care and leaves
-the responsibility for generating properly cased Fortran code to the user.
+SymPy is case sensitive. So, Sympy would print lower and upper case alphabets
+as different variables in fortan code.
 """
 
 from __future__ import print_function, division
@@ -617,7 +617,18 @@ def fcode(expr, assign_to=None, **settings):
              end if
           A(3, 1) = sin(x)
     """
+    from sympy import Symbol, ordered
+    used_name = []
+    word_map = {}
 
+    for sym in tuple(ordered(expr.atoms(Symbol))):
+        name = sym.name
+        while name.lower() in used_name:
+            name += '_'
+        used_name.append(name.lower())
+        word_map[sym] = Symbol(name)
+
+    expr = expr.xreplace(word_map)
     return FCodePrinter(settings).doprint(expr, assign_to)
 
 

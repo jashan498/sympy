@@ -103,10 +103,11 @@ class FCodePrinter(CodePrinter):
         '!=': '/=',
     }
 
-    def __init__(self, settings={}):
-        self.type_aliases = dict(chain(self.type_aliases.items(),
-                                       settings.pop('type_aliases', {}).items()))
-        self.type_mappings = dict(chain(self.type_mappings.items(),
+    word_map = {}
+
+    def __init__(self, expr_sym = None, settings={}):       ## expr_sym here takes any random  expr containing symbols to be used for now
+                                       settings.pop('type_aliases', {}).items()))   # but im thinking to change it to a comma seperated
+        self.type_mappings = dict(chain(self.type_mappings.items(),                  #  string of symbols in domain
                                         settings.pop('type_mappings', {}).items()))
         super(FCodePrinter, self).__init__(settings)
         self.known_functions = dict(known_functions)
@@ -118,6 +119,23 @@ class FCodePrinter(CodePrinter):
             raise ValueError("Unknown Fortran standard: %s" % self._settings[
                              'standard'])
         self.module_uses = defaultdict(set)  # e.g.: use iso_c_binding, only: c_int
+
+        if expr_sym is not None:
+            from sympy import symbols, ordered, Symbol
+            used_name = []
+
+            for sym in tuple(ordered(expr_sym.atoms(Symbol))):
+                name = sym.name
+                while name.lower() in used_name:
+                    name += '_'
+                used_name.append(name.lower())
+                if name == sym.name:
+                    self.word_map[sym] = sym
+                else:
+                    self.word_map[sym] = symbols(name, cls=sym.__class__, **sym.assumptions0)
+
+
+
 
 
     @property
@@ -506,7 +524,7 @@ class FCodePrinter(CodePrinter):
         return new_code
 
 
-def fcode(expr, assign_to=None, **settings):
+def fcode(fob, expr, assign_to=None, **settings):
     """Converts an expr to a string of fortran code
 
     Parameters
@@ -617,22 +635,8 @@ def fcode(expr, assign_to=None, **settings):
              end if
           A(3, 1) = sin(x)
     """
-    from sympy import symbols, ordered, Symbol
-    used_name = []
-    word_map = {}
-
-    for sym in tuple(ordered(expr.atoms(Symbol))):
-        name = sym.name
-        while name.lower() in used_name:
-            name += '_'
-        used_name.append(name.lower())
-        if name == sym.name:
-            word_map[sym] = sym
-        else:
-            word_map[sym] = symbols(name, cls=sym.__class__, **sym.assumptions0)
-
-    expr = expr.xreplace(word_map)
-    return FCodePrinter(settings).doprint(expr, assign_to)
+    expr = expr.xreplace(fob.word_map)
+    return fob.doprint(expr, assign_to)
 
 
 def print_fcode(expr, **settings):

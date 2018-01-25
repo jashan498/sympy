@@ -106,8 +106,9 @@ class FCodePrinter(CodePrinter):
     word_map = {}
 
     def __init__(self, expr_sym = None, settings={}):       ## expr_sym here takes any random  expr containing symbols to be used for now
-                                       settings.pop('type_aliases', {}).items()))   # but im thinking to change it to a comma seperated
-        self.type_mappings = dict(chain(self.type_mappings.items(),                  #  string of symbols in domain
+        self.type_aliases = dict(chain(self.type_aliases.items(),   # but im thinking to change it to a comma seperated string of symbols in domain
+                                       settings.pop('type_aliases', {}).items()))
+        self.type_mappings = dict(chain(self.type_mappings.items(),
                                         settings.pop('type_mappings', {}).items()))
         super(FCodePrinter, self).__init__(settings)
         self.known_functions = dict(known_functions)

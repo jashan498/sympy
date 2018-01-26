@@ -120,10 +120,6 @@ class FCodePrinter(CodePrinter):
                              'standard'])
         self.module_uses = defaultdict(set)  # e.g.: use iso_c_binding, only: c_int
 
-
-        # if expr_sym is not None:
-
-
     @property
     def _lead(self):
         if self._settings['source_format'] == 'fixed':

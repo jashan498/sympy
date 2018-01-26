@@ -319,6 +319,20 @@ class CodePrinter(StrPrinter):
             return self._get_statement("%s = %s" % (lhs_code, rhs_code))
 
     def _print_Symbol(self, expr):
+        if self.language == "Fortran" and self.symbol_name_mangling == True:
+            from sympy import symbols, ordered, Symbol
+            for sym in tuple(ordered(expr.atoms(Symbol))):
+                if sym not in self.word_map:
+                    name = sym.name
+                    while name.lower() in self.used_name:
+                        name += '_'
+                    self.used_name.append(name.lower())
+                    if name == sym.name:
+                        self.word_map[sym] = sym
+                    else:
+                        self.word_map[sym] = symbols(name, cls=sym.__class__, **sym.assumptions0)
+
+            expr = expr.xreplace(self.word_map)
 
         name = super(CodePrinter, self)._print_Symbol(expr)
 

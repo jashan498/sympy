@@ -103,10 +103,9 @@ class FCodePrinter(CodePrinter):
         '!=': '/=',
     }
 
-    word_map = {}
-
-    def __init__(self, expr_sym = None, settings={}):       ## expr_sym here takes any random  expr containing symbols to be used for now
-        self.type_aliases = dict(chain(self.type_aliases.items(),   # but im thinking to change it to a comma seperated string of symbols in domain
+    def __init__(self, settings={}):
+        self.word_map = {}
+        self.type_aliases = dict(chain(self.type_aliases.items(),
                                        settings.pop('type_aliases', {}).items()))
         self.type_mappings = dict(chain(self.type_mappings.items(),
                                         settings.pop('type_mappings', {}).items()))
@@ -121,22 +120,8 @@ class FCodePrinter(CodePrinter):
                              'standard'])
         self.module_uses = defaultdict(set)  # e.g.: use iso_c_binding, only: c_int
 
-        if expr_sym is not None:
-            from sympy import symbols, ordered, Symbol
-            used_name = []
 
-            for sym in tuple(ordered(expr_sym.atoms(Symbol))):
-                name = sym.name
-                while name.lower() in used_name:
-                    name += '_'
-                used_name.append(name.lower())
-                if name == sym.name:
-                    self.word_map[sym] = sym
-                else:
-                    self.word_map[sym] = symbols(name, cls=sym.__class__, **sym.assumptions0)
-
-
-
+        # if expr_sym is not None:
 
 
     @property
@@ -525,7 +510,7 @@ class FCodePrinter(CodePrinter):
         return new_code
 
 
-def fcode(fob, expr, assign_to=None, **settings):
+def fcode(fob, expr, name_mangling = True, assign_to = None, **settings):
     """Converts an expr to a string of fortran code
 
     Parameters
@@ -636,7 +621,8 @@ def fcode(fob, expr, assign_to=None, **settings):
              end if
           A(3, 1) = sin(x)
     """
-    expr = expr.xreplace(fob.word_map)
+    fob.used_name= []
+    fob.symbol_name_mangling = name_mangling
     return fob.doprint(expr, assign_to)
 
 

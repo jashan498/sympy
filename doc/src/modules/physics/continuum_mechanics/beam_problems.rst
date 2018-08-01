@@ -52,10 +52,10 @@ applied at 5 meters away from the start of the beam. A downward point load
 of 12 kN is applied at the end.
 
 .. parsed-literal::
-                                     
-  \\\\|  8 KN/m
-  \\\\||||||||||||     50 KN-m       12 KN
-  \\\\|________________|_______________|
+                                     12 KN
+  \\\\|  8 KN/m                       ||
+  \\\\||||||||||||     50 KN-m        \\/
+  \\\\|________________|_______________
   \\\\|________________|_______________|
   \\\\|                                :
   \\\\|----------------|---------------|
@@ -117,11 +117,12 @@ and another one at a distance of 10 meters from the start. The
 deflection is restricted at both the supports.
 
 .. parsed-literal::
-  8 N                                        120 Nm
+  || 8 N                                       120 Nm
+  \\/______________________________________________|
   |_______________________________________________|
-  |_______________________________________________|
-              /\\                                 /\\
+              /\\                                /\\
   |------------|---------------------------------|
+      10 m                  20 m
 
 .. note::
 
@@ -180,8 +181,9 @@ is applied from the mid till the end of the beam.
                         1.5 KN-m               
    ______________________|________________________
   |_______________________________________________|
-   ooo                   |                       /
+  ooo                    |                       /\\
   |----------------------|-----------------------|
+          3.0 m                     3.0 m
 
 .. note::
 
@@ -240,13 +242,13 @@ to a distributed constant load of 10 KN/m from the starting point till
 2 meters away from it. Two pointloads of 20KN and 8KN are applied at
 5 meters and 7.5 meters away from the starting point respectively.
 
-.. line-block::
+.. parsed-literal::
                                  20KN         8KN
     10 KN/m                      ||           ||
-  ||||||||||||||                  /            /
+  ||||||||||||||                 \\/          \\/
    _______________________________________________
   |_______________________________________________|
-        /                                  OOO
+        /\\                                 OOO
 
   |-----|------|-----------------|----------|--|--|
      1m    1m          3m              2m   .5m .5m
@@ -258,8 +260,6 @@ to a distributed constant load of 10 KN/m from the starting point till
 
 .. code:: pycon
 
-  |-----|------|-----------------|----------|--|--|
-     1m    1m          3m              2m   .5m .5m
     >>> from sympy.physics.continuum_mechanics.beam import Beam
     >>> from sympy import symbols
     >>> E,I,M,V = symbols('E I M V')
@@ -315,7 +315,7 @@ away from start.
                        |---------------|
                           12 KN
   \\\\|  4 KN/m            ||
-  \\\\||||||||||||          /
+  \\\\||||||||||||         \\/
   \\\\|________________________________
   \\\\|________________________________|
   \\\\|          :          :          :
@@ -387,7 +387,7 @@ away from that end. Also a clockwise moment of 5 KN-m is applied at the overhang
             |||||||||||||||||                         5 KN-m
     ____________________________________________________|
    O____________________________________________________|
-  /                                     / 
+  / \\                                  /\\
 
    |--------|----------------|----------|---------------|
        2m           4m            2m            3m

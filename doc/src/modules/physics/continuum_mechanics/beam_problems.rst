@@ -257,7 +257,15 @@ to a distributed constant load of 10 KN/m from the starting point till
     being positive.
 
 .. code:: pycon
+                                 20KN         8KN
+    10 KN/m                      ||           ||
+  ||||||||||||||                 \/           \/
+   _______________________________________________
+  |_______________________________________________|
+        /\                                 OOO
 
+  |-----|------|-----------------|----------|--|--|
+     1m    1m          3m              2m   .5m .5m
     >>> from sympy.physics.continuum_mechanics.beam import Beam
     >>> from sympy import symbols
     >>> E,I,M,V = symbols('E I M V')

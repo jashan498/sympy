@@ -116,7 +116,7 @@ point. There are two simple supports below the beam. One at the end
 and another one at a distance of 10 meters from the start. The
 deflection is restricted at both the supports.
 
-.. parsed-literal::
+.. container:: custom
   || 8 N                                       120 Nm
   \/______________________________________________|
   |_______________________________________________|

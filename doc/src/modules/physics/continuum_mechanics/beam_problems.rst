@@ -52,10 +52,10 @@ applied at 5 meters away from the start of the beam. A downward point load
 of 12 kN is applied at the end.
 
 .. parsed-literal::
-                                     12 KN
-  \\\\|  8 KN/m                       ||
-  \\\\||||||||||||     50 KN-m         /
-  \\\\|________________|_______________
+                                     
+  \\\\|  8 KN/m
+  \\\\||||||||||||     50 KN-m       12 KN
+  \\\\|________________|_______________|
   \\\\|________________|_______________|
   \\\\|                                :
   \\\\|----------------|---------------|
@@ -117,10 +117,10 @@ and another one at a distance of 10 meters from the start. The
 deflection is restricted at both the supports.
 
 .. parsed-literal::
-  || 8 N                                       120 Nm
-  \/______________________________________________|
+  8 N                                        120 Nm
   |_______________________________________________|
-              /                                  /
+  |_______________________________________________|
+              /\\                                 /\\
   |------------|---------------------------------|
 
 .. note::

@@ -240,7 +240,7 @@ to a distributed constant load of 10 KN/m from the starting point till
 2 meters away from it. Two pointloads of 20KN and 8KN are applied at
 5 meters and 7.5 meters away from the starting point respectively.
 
-.. parsed-literal::
+.. line-block::
                                  20KN         8KN
     10 KN/m                      ||           ||
   ||||||||||||||                 \/           \/
@@ -257,12 +257,6 @@ to a distributed constant load of 10 KN/m from the starting point till
     being positive.
 
 .. code:: pycon
-                                 20KN         8KN
-    10 KN/m                      ||           ||
-  ||||||||||||||                 \/           \/
-   _______________________________________________
-  |_______________________________________________|
-        /\                                 OOO
 
   |-----|------|-----------------|----------|--|--|
      1m    1m          3m              2m   .5m .5m
